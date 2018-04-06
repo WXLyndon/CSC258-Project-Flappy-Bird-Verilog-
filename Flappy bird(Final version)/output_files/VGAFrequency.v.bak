@@ -1,0 +1,30 @@
+module VGAFrequency(
+    // input CLOCK_50, //for test
+	 input clk,
+	 input clr,
+    output reg VGAclk
+    );
+	 
+	reg [1:0] count;
+	
+	initial
+	begin
+		count = 0;
+		VGAclk = 1;
+	end
+	
+	always @ (posedge clk, posedge clr) begin
+		if (clr) begin
+			count <= 0;
+			VGAclk <= 1;
+		end
+		else begin
+			count <= count + 1;
+			if (count == 2'd2) begin
+				count <= 2'b0;
+				VGAclk <= ~VGAclk;
+			end
+		end
+	end
+
+endmodule

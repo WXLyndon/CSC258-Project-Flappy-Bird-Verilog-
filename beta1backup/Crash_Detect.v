@@ -1,0 +1,35 @@
+module Crash_Detect(
+    input clr,
+    input [9:0] bird_y_pos,
+    input [9:0] tube1_x_pos,
+    input [9:0] tube1_y_pos,
+    input [9:0] tube2_x_pos,
+    input [9:0] tube2_y_pos,
+    input [9:0] tube3_x_pos,
+    input [9:0] tube3_y_pos,
+    output game_end
+    );
+	 
+	wire crash;
+	
+	// Set bird_x_pos
+	wire [9:0] bird_x_pos;
+	assign bird_x_pos = 10'd180; 
+	
+	// Check whether crash: 1 crash, 0 not yet
+	assign crash = (
+		(((bird_y_pos + 10'd15 >= tube1_y_pos + 10'd50) | (bird_y_pos - 10'd15 <= tube1_y_pos - 10'd50)) &
+			((bird_x_pos + 10'd15 >= tube1_x_pos - 10'd30) & (bird_x_pos - 10'd15 <= tube1_x_pos + 10'd30))) |
+		(((bird_y_pos + 10'd15 >= tube2_y_pos + 10'd50) | (bird_y_pos -10'd15 <= tube2_y_pos - 10'd50)) &
+			((bird_x_pos + 10'd15 >= tube2_x_pos - 10'd30) & (bird_x_pos - 10'd15 <= tube2_x_pos + 10'd30))) |
+		(((bird_y_pos + 10'd15 >= tube3_y_pos + 10'd50) | (bird_y_pos - 10'd15 <= tube3_y_pos - 10'd50)) &
+			((bird_x_pos + 10'd15 >= tube3_x_pos - 10'd30) & (bird_x_pos - 10'd15 <= tube3_x_pos + 10'd30)))
+		);
+	
+	// Output whether game ends: 1 ends, 0 not yet
+	assign game_end = 
+		(!clr) ? 0:
+		(crash) ? 1:
+		0;
+
+endmodule
